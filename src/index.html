@@ -1,0 +1,165 @@
+      <!DOCTYPE html>
+      <html lang="it">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Inserimento Ferie, Malattie, Permessi</title>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+          <style>
+              body {
+                  font-family: 'Roboto', sans-serif;
+                  background-color: #f0f0f0; /* Slightly darker background */
+                  margin: 0;
+                  padding: 20px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  min-height: 100vh;
+              }
+              .container {
+                  background-color: #ffffff;
+                  border: none;
+                  padding: 30px;
+                  border-radius: 8px;
+                  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                  width: 380px; /* Adjusted width */
+                  text-align: left;
+              }
+              h1 {
+                  text-align: center;
+                  color: #333;
+                  margin-bottom: 25px;
+                  font-weight: 700;
+              }
+              label {
+                  display: block;
+                  margin-bottom: 8px;
+                  color: #555;
+                  font-weight: 500;
+              }
+              input[type="text"], input[type="number"], input[type="time"] {
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid #ccc;
+                  border-radius: 4px;
+                  box-sizing: border-box;
+                  margin-bottom: 15px;
+              }
+              input[type="submit"], #add-permesso {
+                  width: 100%;
+                  padding: 12px;
+                  border: none;
+                  border-radius: 4px;
+                  font-weight: 500;
+                  font-size: 16px;
+                  cursor: pointer;
+                  transition: background-color 0.3s ease;
+                  margin-bottom: 15px;
+              }
+              input[type="submit"] {
+                background-color: #007bff;
+                color: white;
+              }
+              input[type="submit"]:hover {
+                  background-color: #0056b3;
+              }
+              #add-permesso {
+                background-color: #28a745;
+                color: white;
+              }
+               #add-permesso:hover {
+                background-color: #218838;
+              }
+              .submit-container {
+                  text-align: center;
+                  padding-top: 10px;
+              }
+              .permesso-entry {
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  margin-bottom: 10px;
+              }
+              .permesso-entry input {
+                  margin-bottom: 0;
+              }
+              .permesso-giorno { flex: 1; }
+              .permesso-inizio, .permesso-fine { flex: 2; }
+              .remove-permesso {
+                  background: #dc3545;
+                  color: white;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                  padding: 5px 10px;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h1>Inserisci i tuoi dati</h1>
+              <form action="/submit" method="post">
+                  <label for="nome">Nome:</label>
+                  <input type="text" id="nome" name="nome" required>
+                  
+                  <label for="cognome">Cognome:</label>
+                  <input type="text" id="cognome" name="cognome" required>
+
+                  <label for="mese">Mese (es. Gennaio):</label>
+                  <input type="text" id="mese" name="mese" required>
+                  
+                  <label for="ferie">Giorni di Ferie (es. 1, 5, 22):</label>
+                  <input type="text" id="ferie" name="ferie" placeholder="es. 1, 5, 22">
+                  
+                  <label for="malattia">Giorni di Malattia (es. 10, 11, 12):</label>
+                  <input type="text" id="malattia" name="malattia" placeholder="es. 10, 11, 12">
+
+                  <label>Permessi:</label>
+                  <div id="permessi-container"></div>
+                  <button type="button" id="add-permesso">Aggiungi Permesso</button>
+                  <input type="hidden" name="permessi" id="permessi-data">
+                  
+                  <div class="submit-container">
+                      <input type="submit" value="Invia">
+                  </div>
+              </form>
+          </div>
+
+          <script>
+              document.getElementById('add-permesso').addEventListener('click', function() {
+                  const container = document.getElementById('permessi-container');
+                  const entry = document.createElement('div');
+                  entry.className = 'permesso-entry';
+                  entry.innerHTML = `
+                      <input type="number" placeholder="Giorno" class="permesso-giorno" min="1" max="31" required>
+                      <input type="time" class="permesso-inizio" required>
+                      <input type="time" class="permesso-fine" required>
+                      <button type="button" class="remove-permesso">X</button>
+                  `;
+                  container.appendChild(entry);
+              });
+
+              document.getElementById('permessi-container').addEventListener('click', function(e) {
+                  if (e.target.classList.contains('remove-permesso')) {
+                      e.target.parentElement.remove();
+                  }
+              });
+
+              document.querySelector('form').addEventListener('submit', function(e) {
+                  const entries = document.querySelectorAll('.permesso-entry');
+                  const permessiData = [];
+                  entries.forEach(entry => {
+                      const giorno = entry.querySelector('.permesso-giorno').value;
+                      const inizio = entry.querySelector('.permesso-inizio').value;
+                      const fine = entry.querySelector('.permesso-fine').value;
+                      if (giorno && inizio && fine) {
+                          permessiData.push(`${giorno}:${inizio}-${fine}`);
+                      }
+                  });
+                  document.getElementById('permessi-data').value = permessiData.join(',');
+              });
+          </script>
+      </body>
+      </html>
