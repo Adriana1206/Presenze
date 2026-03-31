@@ -168,12 +168,14 @@ def submit():
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
 
-def main():
-    app.run(
-        host="0.0.0.0",
-        port=int(os.environ.get('PORT', 8080))
-    )
+app = Flask(__name__)
+
+# def main():
+#     app.run(
+#         host="0.0.0.0",
+#         port=int(os.environ.get('PORT', 8080))
+#     )
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
