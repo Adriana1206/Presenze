@@ -4,7 +4,7 @@ import calendar
 import holidays
 import locale
 from datetime import date, datetime
-from flask import Flask, send_file, request
+from flask import Flask, send_file, send_from_directory, request
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font
 from openpyxl.utils import get_column_letter
@@ -19,7 +19,7 @@ italian_months = {
 
 @app.route("/")
 def index():
-    return send_file('src/index.html')
+    return send_from_directory("src", "index.html")
 
 @app.route("/submit", methods=['POST'])
 def submit():
